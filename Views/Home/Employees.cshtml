@@ -1,0 +1,45 @@
+@model EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Scripts {
+    <script type="text/javascript">
+    // alert("Hello");
+    $(document).ready(() => {
+        $('#empNameChoose').on('change', (e) => {
+            console.log(e.target);
+            console.log(e.target.value);
+            let empId = e.target.value;
+            $.ajax({
+                type: 'POST',
+                url: "/empsalary",
+                contentType: 'application/json',
+                data: empId, 
+                success : (res) => {
+                    console.log(res);
+                    $('#empAmount').text(`Amount is : ${res.amount} and Date : ${res.disburshedDate}`);
+                }
+            })
+        })
+    })
+    </script>
+}
+
+<div class="text-center container">
+    <div class="row">
+    <div class="dropdown col-6">
+        <select id="empNameChoose">
+            <option>Select</option>
+            @foreach(Emp_Master emp in Model.AllEmaps)
+            {
+                <option value="@emp.Emp_Id">@emp.Emp_Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-6">
+        <p id="empAmount">Please Select the Employee to see the Amount</p>
+    </div>
+    </div>
+</div>
